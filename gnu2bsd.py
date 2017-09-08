@@ -177,7 +177,7 @@ def gnu_to_bsd_color(ansi_sequence):
 
 def LS_COLORS_to_LSCOLORS(LS_COLORS):
     '''
-    Takes the value of the GNU LS_COLORS variable and returns a corresponding
+    Take the value of the GNU LS_COLORS variable and return a corresponding
     value for the BSD LSCOLORS variable. Example:
 
     >>> LS_COLORS_to_LSCOLORS('rs=0:di=01;34:ln=01;36:mh=00:tw=40:*.txt=44')

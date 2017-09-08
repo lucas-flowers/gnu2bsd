@@ -27,7 +27,7 @@ choices to take advantage of it:
 
 This program adds a third option:
 
-3. Run gnu2bsd to us GNU LS_COLORS to generate BSD LSCOLORS
+3. Run gnu2bsd, using GNU LS_COLORS to generate BSD LSCOLORS
 
 This allows you to keep using BSD ls while still storing your color
 configuration in one place. Note, however, these two disadvantages:
@@ -74,6 +74,7 @@ most terminals use ANSI, this program should work in most cases.
 See Also
 ========
 
-BSD: ``man ls``
-GNU: ``man ls``, ``man dir_colors``, ``man dircolors``, ``ls.c`` source
++ BSD: ``man ls``
+
++ GNU: ``man ls``, ``man dir_colors``, ``man dircolors``, ``ls.c`` source
 
