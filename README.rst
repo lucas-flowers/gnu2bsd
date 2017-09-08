@@ -62,7 +62,7 @@ CLICOLOR variable to get colors without needing the ``-G`` option:
 
 .. code:: bash
 
-    export CLICOLOR
+    export CLICOLOR=1
 
 Notes
 =====
