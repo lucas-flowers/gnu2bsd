@@ -94,9 +94,16 @@ ANSI_POSITIVE = 27    # bg and fg color swap off
 ANSI_FG_EXTENDED = 38 # extended fg color options
 ANSI_BG_EXTENDED = 48 # extended bg color options
 
-# Extended colors (ignored)
-ANSI_EXTENDED_256 = 5 # marks the start of a 256-color index parameter to be ignored
-ANSI_EXTENDED_RGB = 2 # marks the start of three RGB parameters to ignore
+# After an ANSI_*_EXTENDED code, there is a second code choosing what kind of
+# parameters to expect, followed by those parameters. This is a map of the
+# possible second codes to the number of parameters that they expect. (Though
+# gnu2bsd will ignore these codes, it needs to know how many parameters to
+# skip.)
+ANSI_COLOR_TYPE_PARAMS = {
+    # <type-code> : <number-of-parameters>
+    5 : 1, # one parameter representing a 256-bit color
+    2 : 3, # three parameters representing an RGB color
+}
 
 # Acceptable codes not used by BSD
 ANSI_IGNORE = range(0, 65+1)
@@ -151,24 +158,18 @@ def gnu_to_bsd_color(ansi_sequence):
             # find out how many extra parameters we need to ignore
             try:
                 i += 1
-                ansi_code = ansi_codes[i]
-                if ansi_code == ANSI_EXTENDED_256:
-                    skip = 1 # the next parameter is a 256-color index
-                elif ansi_code == ANSI_EXTENDED_RGB:
-                    skip = 3 # the next three parameters are RGB color indices
-                else:
-                    raise ValueError('Invalid extended color sequence')
+                ansi_color_type = ansi_codes[i]
+                skip = ANSI_COLOR_TYPE_PARAMS[ansi_color_type]
                 i += skip
-                ansi_code = ansi_codes[i]
-            except IndexError:
-                raise ValueError('Incomplete extended color sequence')
+            except (IndexError, KeyError):
+                raise ValueError('Invalid extended color sequence')
         elif ansi_code in ANSI_IGNORE:
             pass
         else:
             raise ValueError('Invalid ANSI SGR code: {}'.format(ansi_code))
         i += 1
 
-    if bold:
+    if bold and bsd_fg != 'x':
         bsd_fg = bsd_fg.upper()
     if swap:
         bsd_fg, bsd_bg = bsd_bg, bsd_fg
